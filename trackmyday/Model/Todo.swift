@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Todo: Hashable, Identifiable {
-    let id = UUID().uuidString
+struct Todo: Hashable, Identifiable, Codable {
+    var id = UUID().uuidString
     var todo: String
     var isCompleted: Bool
 }

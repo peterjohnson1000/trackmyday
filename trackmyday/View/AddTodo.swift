@@ -17,10 +17,10 @@ struct AddTodo: View {
     
     var body: some View {
         VStack {
-            TextField("Enter your taks", text: $textFieldText)
+            TextField("Enter your task", text: $textFieldText)
                 .padding(.horizontal)
                 .frame(height:55)
-                .background(Color.gray)
+                .background(Color(hex:"#f9f9f9"))
                 .cornerRadius(10)
             
             Button(action: {

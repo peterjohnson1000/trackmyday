@@ -10,11 +10,24 @@ import SwiftUI
 
 class TodoDataModel: ObservableObject {
     
-    @Published var test: [Todo] = [
-        Todo(todo: "drink water", isCompleted: false),
-        Todo(todo: "take a bath", isCompleted: false),
-        Todo(todo: "pray", isCompleted: false)
-    ]
+    @Published var test: [Todo] = [] {
+        didSet {
+            saveItems()
+        }
+    }
+    
+    init() {
+        getItems()
+    }
+    
+    func getItems() {
+        guard 
+            let data = UserDefaults.standard.data(forKey: "persistentTodo"),
+            let decodedData = try? JSONDecoder().decode([Todo].self, from: data)
+        else { return }
+        
+        self.test = decodedData
+    }
     
     func appendNewTodo(newTodo: String) {
         test.append(Todo(todo: newTodo, isCompleted: false))
@@ -33,6 +46,12 @@ class TodoDataModel: ObservableObject {
             if test[index].id == todoID {
                 test[index].isCompleted.toggle()
             }
+        }
+    }
+    
+    func saveItems() {
+        if let encodedData = try? JSONEncoder().encode(test) {
+            UserDefaults.standard.setValue(encodedData, forKey: "persistentTodo")
         }
     }
 }

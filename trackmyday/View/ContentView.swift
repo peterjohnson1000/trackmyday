@@ -13,25 +13,32 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(allTodos.test) { data in
-                    HStack {
-                        Image(systemName: data.isCompleted ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(data.isCompleted ? .green : .gray)
-                        Text(data.todo)
-                            .strikethrough(data.isCompleted ? true : false)
-                    }
-                    .onTapGesture {
-                        allTodos.todoCompleted(todoID: data.id)
+            VStack {
+                if allTodos.test.count == 0 {
+                    ifEmptyTodoList()
+                }
+                else {
+                    List {
+                        ForEach(allTodos.test) { data in
+                            HStack {
+                                Image(systemName: data.isCompleted ? "checkmark.circle.fill" : "circle")
+                                    .foregroundStyle(data.isCompleted ? .green : .gray)
+                                Text(data.todo)
+                                    .strikethrough(data.isCompleted ? true : false)
+                            }
+                            .onTapGesture {
+                                allTodos.todoCompleted(todoID: data.id)
+                            }
+                        }
+                        .onDelete(perform: allTodos.deleteTodo)
+                        .onMove(perform: allTodos.moveTodo)
                     }
                 }
-                .onDelete(perform: allTodos.deleteTodo)
-                .onMove(perform: allTodos.moveTodo)
             }
-            .navigationTitle("Todo")
+            .navigationTitle("Todo List")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink("Edit", destination: Text("Edit"))
+                    EditButton()
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -39,6 +46,20 @@ struct ContentView: View {
                 }
             }
         }
+    }
+}
+
+struct ifEmptyTodoList: View {
+    var body: some View {
+        HStack
+        {
+            Text("Click")
+            Text("Add")
+                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                .foregroundStyle(.blue)
+            Text("to enter your first task!")
+        }
+        .padding(.top)
     }
 }
 
